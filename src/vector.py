@@ -2,16 +2,23 @@ from unittest import result
 
 
 class Matrix:
-    def __init__(self,mat):
-        self.M=mat
-    def matrix_mul(self,A,span):
-        result = span.M
-        for i in range(len(A.M)):
-            for j in range(len(span.M)):
-                result[i][j]=0
-                for k in range(len(span)):
-                    result[i][j]+=A[i][k]*span[k][j]
-        return result
+    #constructor to intialize two matrices
+    def __init__(self,mat1,mat2):
+        self.A=mat1
+        self.B=mat2
+    def matrix_mul(self):
+        #resultant vector in form of 2x1
+        result = [[0],[0]]
+        # iterate through rows of A
+        for i in range(len(self.A)):
+            # iterate through columns of B
+            for j in range(len(self.B[0])):
+                # iterate through rows of B
+                for k in range(len(self.B)):
+                    result[i][j] +=self.A[i][k] *self.B[k][j]
+        for r in result:
+            print(r)
+            
     def determinant():
         pass
         
@@ -35,15 +42,10 @@ class Grid:
         #pygame program to draw based on points
         pass
 '''
-
 def main():
     ar1 = [[1,3],[2,4]]
-    ar2 = [2,4]
-    A1 = Matrix(ar1)
-    A2 = Matrix(ar2)
-    res = A1.matrix_mul(A1,A2)
-    print(res)
-    print(ar1*ar2)
-
-
+    ar2 = [[2],[4]]
+    A1=Matrix(ar1,ar2)
+    A1.matrix_mul()
+   
 main()
