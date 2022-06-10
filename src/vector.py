@@ -1,5 +1,3 @@
-from unittest import result
-
 
 class Matrix:
     #constructor to intialize two matrices
@@ -23,7 +21,7 @@ class Matrix:
         pass
         
 
-
+'''
 class Vector:
     SCALE = 1
     def __init__(self,M):
@@ -41,7 +39,7 @@ class Grid:
     def draw_grid(self):
         #pygame program to draw based on points
         pass
-'''
+
 def main():
     ar1 = [[1,3],[2,4]]
     ar2 = [[2],[4]]
@@ -49,3 +47,4 @@ def main():
     A1.matrix_mul()
    
 main()
+'''
