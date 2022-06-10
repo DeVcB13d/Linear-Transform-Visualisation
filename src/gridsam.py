@@ -5,7 +5,7 @@ Creating a grid class to represent the grid
 > With the basis vectors, we can form a grid which is represented as a set of points in the memory
 > The amount of points in the set of points is based on the scale
 '''
-import numpy as np
+from Matrix import *
 import matplotlib.pyplot as plt
 
 class vector:
@@ -19,8 +19,8 @@ class vector:
 
 
 class grid:
-    std_grid_list = np.array([[0,0],[0,1],[1,0],[1,1],[0,-1],[-1,0],[-1,1],[1,-1],[1,1],[-1,-1]])
-    SCALE = 10
+    std_grid_list = [[0,0],[0,1],[1,0],[0,-1],[-1,0]]
+    SCALE = 4
     #Grid is initialised using 2 vectors
     def __init__(self,base1,base2):
         self.v = base1
@@ -30,12 +30,18 @@ class grid:
     #To generate scale points 
     def generate_grid(self,scale = SCALE):
         self.gpoints = []
-        tr = np.array([[self.v.x,self.v.y],[self.u.x,self.u.y]])
+        #tr = np.array([[self.v.x,self.v.y],[self.u.x,self.u.y]])
         for k in range(1,scale):
-            for point in self.std_grid_list*k:
-                plt.scatter(point[0],point[1])
-                print(point)
-                self.gpoints.append(tr*point)
+            for el in self.std_grid_list:
+                if el not in self.gpoints:
+                    self.gpoints.append(el*k)
+                    print(el*k)
+            for i in range(len(self.gpoints)) :
+                for j in range(i+1,len(self.gpoints)):
+                    sum = [self.gpoints[i][0] + self.gpoints[j][0],self.gpoints[i][1] + self.gpoints[j][1]]
+                    if sum not in self.gpoints:
+                        self.gpoints.append(sum)
+                        print(sum)
         return self.gpoints
     
     def drawgrid(window):
@@ -44,6 +50,7 @@ class grid:
         pass
 
 def main():
+    print("JII")
     v1 = vector(1,2)
     v2 = vector(3,4)
     G = grid(v1,v2)
@@ -52,5 +59,5 @@ def main():
     for i in pts:
         print(i,sep = "\t")
         plt.scatter(i[0],i[1])
-    
+    plt.show()
 main()

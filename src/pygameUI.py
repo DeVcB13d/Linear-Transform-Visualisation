@@ -12,7 +12,7 @@ pygame.init()
 screen = pygame.display.set_mode((wind_len, wind_brea))
 pygame.display.set_caption('Linear transformation')
 screen.fill(BLUE)
-pygame_icon = pygame.image.load('logo.jpg')
+pygame_icon = pygame.image.load('media\logo.jpg')
 pygame.display.set_icon(pygame_icon)
 
 def draw_main_grid(gridsize):
