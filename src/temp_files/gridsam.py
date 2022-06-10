@@ -5,7 +5,7 @@ Creating a grid class to represent the grid
 > With the basis vectors, we can form a grid which is represented as a set of points in the memory
 > The amount of points in the set of points is based on the scale
 '''
-from Matrix import *
+from temp_files.Matrix import *
 import matplotlib.pyplot as plt
 
 class vector:
@@ -50,7 +50,6 @@ class grid:
         pass
 
 def main():
-    print("JII")
     v1 = vector(1,2)
     v2 = vector(3,4)
     G = grid(v1,v2)

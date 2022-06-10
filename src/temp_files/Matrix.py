@@ -22,8 +22,7 @@ class Matrix:
                         result[i][j] +=self.M[i][k] *self.B.M[k][j]
             return result
     def __add__():
-        pass
-            
+        pass    
     def determinant():
         pass
         
