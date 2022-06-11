@@ -1,16 +1,17 @@
 # from tkinter import *
 import tkinter as tk
 from tkinter import CENTER, LEFT, RIGHT
+from pygameUI import *
 
 window = tk.Tk(className=' Linear transform-Visualization')
 window.geometry("800x400")
 window.configure(bg="#E6E6FA")
 # setting background image
-bg = tk.PhotoImage(file="bg1.png")
+bg = tk.PhotoImage(file="media\pg2.png")
 label = tk.Label(window, image=bg, width=1280, height=720)
 label.place(x=0, y=0)
 # icon image
-photo = tk.PhotoImage(file="logo.png")
+photo = tk.PhotoImage(file="media\logo2.png")
 window.iconphoto(False, photo)
 # Creating input fields
 label1 = tk.Label(window,
@@ -40,12 +41,11 @@ def Input_vector():
     e2 = tk.Entry(frame1, width=30, justify=LEFT)
     e2.grid(row=3,column=2)
 
-
 myButton1 = tk.Button(window, text="Calculate", command=Input_vector(),font=('calibre', 10, 'bold'),
                       justify=LEFT,padx=10,pady=10
                       ,bg='#C1E1C1')
-myButton2 = tk.Button(window, text="Run simulation",justify=RIGHT,bg='#C1E1C1',font=('calibre', 10, 'bold')
-                      ,padx=5,pady=10)
+myButton2 = tk.Button(window, text="Run simulation",justify=RIGHT,command = run , bg='#C1E1C1',font=('calibre', 10, 'bold')
+                      ,padx=5,pady=10,)
 myButton1.pack()
 myButton2.pack()
 myButton1.place(x=180, y=370)
