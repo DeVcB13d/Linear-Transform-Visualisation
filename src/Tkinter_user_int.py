@@ -4,7 +4,7 @@ from tkinter import CENTER, LEFT, RIGHT
 from pygameUI import *
 
 window = tk.Tk(className=' Linear transform-Visualization')
-window.geometry("800x400")
+window.geometry("800x800")
 window.configure(bg="#E6E6FA")
 # setting background image
 bg = tk.PhotoImage(file="media\pg2.png")
