@@ -61,6 +61,8 @@ class Plotter:
         start = self.plane.coordinate(0,0)
         end = self.plane.coordinate(x,y) 
         pg.draw.line(self.screen,(0,0,255),start,end,4)
+
+        
     
 
 
