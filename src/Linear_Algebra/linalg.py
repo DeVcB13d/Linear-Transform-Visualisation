@@ -48,4 +48,7 @@ class vector_space:
     '''
     Initializing a vector space
     '''
-    def __init__(self,base1,base2):
+    def __init__(self,bases):
+        self.bases = bases
+    def generate_space(self,points):
+        

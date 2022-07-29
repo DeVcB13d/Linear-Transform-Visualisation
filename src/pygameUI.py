@@ -24,4 +24,3 @@ def run():
                 run = False
         pygame.display.update()
 
-

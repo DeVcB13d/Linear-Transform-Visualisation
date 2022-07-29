@@ -8,6 +8,6 @@ YELLOW = (255, 255, 0)
 LAV = (229, 204, 255)
 
 #INTERFACE CONSTANTS
-wind_len = 800
-wind_brea = 800
+wind_len = 400
+wind_brea = 400
 grid_line_width = 3
