@@ -13,4 +13,4 @@ PINK = (255,204,204)
 #INTERFACE CONSTANTS
 wind_len = 800
 wind_brea = 800
-grid_line_width = 3
+grid_line_width = 5

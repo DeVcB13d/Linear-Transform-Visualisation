@@ -1,7 +1,5 @@
 import pygame as pg
 import sys
-
-from zmq import BACKLOG
 from constants import *
 
 class Coordinate_plane:
@@ -91,7 +89,7 @@ class Coordinate_plane:
             pg.draw.line(self.screen, PINK,top1,end1,5)
             pg.draw.line(self.screen, PINK,top2,end2,5)
     # TO zoom the system by the ratio 
-    def zoom(ratio):
+    def move():
         pass
         
 
@@ -133,8 +131,10 @@ def run():
                 Plane.draw_grid_new_base(base1,base2)
 
         pg.display.update()   
-    
-run()
+
+
+if __name__ == "___main__()":
+    run()
 
 
 
