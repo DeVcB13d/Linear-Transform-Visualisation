@@ -133,8 +133,8 @@ def run():
         pg.display.update()   
 
 
-if __name__ == "___main__()":
-    run()
+
+run()
 
 
 
