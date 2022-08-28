@@ -10,7 +10,9 @@ We aim to design a 2D cartesian plane with the help of pygame library. Features 
 
 1. Creating a 2D plane :
 
+```
 ![alt text] <https://github.com/DeVcB13d/Linear-Transform-Visualisation/tree/main/media/pg1.jpg>
+```
 
 * The above shown picture is a model of the 2D plane that we aim to implement
 * Critical features to be added
@@ -21,7 +23,7 @@ We aim to design a 2D cartesian plane with the help of pygame library. Features 
   * Also the plane should be able to move properly
   * Add the linear transform change to the plane (blue lines)
 * Creating an interactive interface using tkinter :
-  
+
 
 2. Adding linear algebra features to the tool
 
