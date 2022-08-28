@@ -8,17 +8,20 @@ Linear transfors are one of the core concepts in linear algebra. A large number 
 
 We aim to design a 2D cartesian plane with the help of pygame library. Features that we aim to give:
 
-1. creating a 2D plane :
+1. Creating a 2D plane :
 
-![alt text] https://github.com/DeVcB13d/Linear-Transform-Visualisation/tree/main/media/pg1.jpg
+![alt text] <https://github.com/DeVcB13d/Linear-Transform-Visualisation/tree/main/media/pg1.jpg>
 
 * The above shown picture is a model of the 2D plane that we aim to implement
 * Critical features to be added
   * Basic coordinate plane with number markings and stuff
   * Getting back the coordinate in cartesian system and the vice versa.
   * Need to able to move the plane with keys and the number markings should change appropriately
+  * To be able to zoom into the plane
   * Also the plane should be able to move properly
-* Add the linear transform change to the plane (blue lines)
+  * Add the linear transform change to the plane (blue lines)
+* Creating an interactive interface using tkinter :
+  
 
 2. Adding linear algebra features to the tool
 
@@ -27,7 +30,17 @@ We aim to design a 2D cartesian plane with the help of pygame library. Features 
     2. Matrix multiplications and its applications : Matrix multiplication AXB is applying a transformation on the A on the standard plane and applying B on the new transformed plane.
     3. Null Space of a matrix : The vectors that go into 0 vector after the transformation A.
     4. Eigenvectors : These vectors would only get streched by a certain amount on applying the transformation, so we have to highlight the vectors that would only get streched
+    5. Finding the determinant : change in area after transformation.
 
+# **Design implementaion**
 
-3. **Design implementaion**
+1. PHASE 1 : Designing the 2D plane:
 
+**Desired Properties:**
+
+* Need to be extremely generalized and be open for expansion
+* Should be able to apply the linear algebra operations on the plane easily
+
+**Ideas/Algorithms for design:**
+
+1.
