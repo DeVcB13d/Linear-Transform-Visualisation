@@ -1,2 +1,5 @@
 
 src/__pycache__/constants.cpython-310.pyc
+src/__pycache__/graph.cpython-310.pyc
+*.pyc
+*.pyc
