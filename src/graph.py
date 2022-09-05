@@ -124,7 +124,8 @@ def run():
             if (event.type == pg.MOUSEBUTTONUP):
                 # To print the selected coordinate
                 pos = pg.mouse.get_pos()
-                print(Plane.rev_coordinate(pos[0],pos[1]))
+                print(Plane.rev_coordinate
+                s[0],pos[1]))
             if (event.type == pg.KEYDOWN):
                 base1 = eval(input("Enter base 1 : "))
                 base2 = (0,1)
@@ -134,7 +135,7 @@ def run():
 
 
 
-run()
+# run()
 
 
 
