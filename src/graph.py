@@ -19,8 +19,10 @@ class Coordinate_plane:
         To input the coodinates and return its 
         pygame UI equialent values
         """
-        #return tuple([self.win_len/2+inx,self.win_wid/2+iny])
-        return tuple([int((self.win_wid/2-inx)*-self.scale),int((self.win_len/2-iny)*self.scale)])
+        inx = inx/self.scale
+        iny = iny/self.scale
+        #return tuple([self.win_wid/2+inx,-self.win_len/2+iny])
+        return tuple([((self.win_wid/2+inx)*self.scale),((self.win_len/2+iny)*-self.scale)])
     def rev_coordinate(self,inx,iny):
         '''
         To return the cartesian values from pg values
@@ -84,14 +86,15 @@ class Coordinate_plane:
         except:
             pass
         print((top_x,top_y),(end_x,end_y))
-        for i in range(0,10):
+        print("END : ",end,"TOP : ",top)
+        for i in range(0,20):
             top1 = top;top2 = top;end1 = end;end2 = end;
             top1 = (top[0],top[1] + 80*i)
             end1 = (end[0],end[1] + 80*i)
             top2 = (top[0],top[1] - 80*i)
             end2 = (end[0],end[1] - 80*i)
-            pg.draw.line(self.screen, PINK,top1,end1,5)
-            pg.draw.line(self.screen, PINK,top2,end2,5)
+            pg.draw.line(self.screen,PINK,top1,end1,5)
+            pg.draw.line(self.screen,PINK,top2,end2,5)
     # TO zoom the system by the ratio 
     def move():
         pass
