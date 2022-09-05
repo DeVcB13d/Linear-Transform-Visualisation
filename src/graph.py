@@ -5,6 +5,7 @@ from constants import *
 class Coordinate_plane:
 
     def __init__(self,screen,win_len,win_wid,grid_size = 10):
+        self.scale=0.0264583333
         self.screen = screen
         self.win_len = win_len
         self.win_wid = win_wid
@@ -13,6 +14,7 @@ class Coordinate_plane:
         self.draw_axis()
         
     def coordinate(self,inx,iny):
+
         """
         To input the coodinates and return its 
         pygame UI equialent values
@@ -22,7 +24,8 @@ class Coordinate_plane:
         '''
         To return the cartesian values from pg values
         '''
-        return tuple([self.win_len/2 - inx,self.win_wid/2 - iny])
+        #return tuple([self.win_len/2 - inx,self.win_wid/2 - iny])
+        return tuple([int((self.win_wid/2-inx)*-self.scale),int((self.win_len/2-iny)*self.scale)])
     def draw_grid(self,gridsize,line_t = 4):
         '''
         To draw the main grid with each line spaced by gridsize
@@ -124,15 +127,14 @@ def run():
             if (event.type == pg.MOUSEBUTTONUP):
                 # To print the selected coordinate
                 pos = pg.mouse.get_pos()
-                print(Plane.rev_coordinate
-                s[0],pos[1]))
+                print(Plane.rev_coordinate(pos[0],pos[1]))
             if (event.type == pg.KEYDOWN):
                 base1 = eval(input("Enter base 1 : "))
                 base2 = (0,1)
                 Plane.draw_grid_new_base(base1,base2)
 
         pg.display.update()   
-
+run()
 
 
 
