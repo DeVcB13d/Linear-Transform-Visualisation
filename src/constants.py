@@ -11,6 +11,6 @@ LAV = (229, 204, 255)
 PINK = (255,204,204)
 
 #INTERFACE CONSTANTS
-wind_len = 800
-wind_brea = 800
+wind_len = 600
+wind_brea = 600
 grid_line_width = 5
