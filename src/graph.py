@@ -19,7 +19,8 @@ class Coordinate_plane:
         To input the coodinates and return its 
         pygame UI equialent values
         """
-        return tuple([self.win_len/2+inx,self.win_wid/2+iny])
+        #return tuple([self.win_len/2+inx,self.win_wid/2+iny])
+        return tuple([int((self.win_wid/2-inx)*-self.scale),int((self.win_len/2-iny)*self.scale)])
     def rev_coordinate(self,inx,iny):
         '''
         To return the cartesian values from pg values
