@@ -44,7 +44,7 @@ def Input_vector():
 myButton1 = tk.Button(window, text="Calculate", command=Input_vector(),font=('calibre', 10, 'bold'),
                       justify=LEFT,padx=10,pady=10
                       ,bg='#C1E1C1')
-myButton2 = tk.Button(window, text="Run simulation",justify=RIGHT,command = run , bg='#C1E1C1',font=('calibre', 10, 'bold')
+myButton2 = tk.Button(window, text="Run simulation",justify=RIGHT,command = run,bg='#C1E1C1',font=('calibre', 10, 'bold')
                       ,padx=5,pady=10,)
 myButton1.pack()
 myButton2.pack()

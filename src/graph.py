@@ -1,11 +1,20 @@
+# Module having the Coordinate Plane tools
+
+
 import pygame as pg
 import sys
 from constants import *
 
-class Coordinate_plane:
 
-    def __init__(self,screen,win_len,win_wid,grid_size = 10):
-        self.scale=0.0264583333
+def F(x,m,c):
+    # To return y given x and slope and c
+    return m*x + c
+
+
+class Coordinate_plane:
+    def __init__(self,screen,win_len = WIN_LEN,win_wid = WIN_WID,grid_size = 10):
+        # Scale - Size of 1 pixel in cm
+        self.scale=0.026458333
         self.screen = screen
         self.win_len = win_len
         self.win_wid = win_wid
@@ -32,6 +41,8 @@ class Coordinate_plane:
     def draw_grid(self,gridsize,line_t = 4):
         '''
         To draw the main grid with each line spaced by gridsize
+
+        NOTE: These markings are done directly based on pygame coordinate system and not on the cartesian one
         '''
         posX = self.win_wid/2
         pg.draw.line(self.screen, YELLOW, (posX,0), (posX,self.win_len),line_t)
@@ -50,7 +61,6 @@ class Coordinate_plane:
             pg.draw.line(self.screen, LAV, hor_ini_pos, hor_fin_pos,line_t)
             hor_ini_pos[1] += gridsize
             hor_fin_pos[1] += gridsize
-
     def draw_axis(self):
         """
         To draw the coordinate axes
@@ -75,26 +85,39 @@ class Coordinate_plane:
         >>> Hoping to change the direct calculations to matrix multiplication
         '''
         BasePoint = (0,0)
-        BasisPoint = base1
-        top_x = wind_brea / 2 
-        end_x = -top_x
+        BasisPoint = base1 #(1,2)
+        top_x = self.win_wid # 200
+        end_x = -top_x # -200
         try:
+            # ( 1 - 0 / 2 - 0 ) * (200 - 0) + 0  = 100
             top_y = (BasisPoint[1] - BasePoint[1])/(BasisPoint[0] - BasePoint[0]) * (top_x - 0 ) + BasePoint[1];
+            # ( 1 - 0 ) -100
             end_y = (BasisPoint[1] - BasePoint[1])/(BasisPoint[0] - BasePoint[0]) * (end_x - 0 ) + BasePoint[1];
-            end = self.coordinate(top_x,top_y)
-            top = self.coordinate(end_x,end_y)
+            top = self.coordinate(top_x,top_y) #(200,100)
+            end = self.coordinate(end_x,end_y) #(-200,-100)
+            print("END : ",end,"TOP : ",top)
         except:
             pass
         print((top_x,top_y),(end_x,end_y))
-        print("END : ",end,"TOP : ",top)
-        for i in range(0,20):
+        
+        mes_scale = self.scale*((self.wind_len/10)*100)
+        for i in range(0,10):
             top1 = top;top2 = top;end1 = end;end2 = end;
-            top1 = (top[0],top[1] + 80*i)
-            end1 = (end[0],end[1] + 80*i)
-            top2 = (top[0],top[1] - 80*i)
-            end2 = (end[0],end[1] - 80*i)
+            top1 = (top[0],top[1] + mes_scale*i)
+            end1 = (end[0],end[1] + mes_scale*i)
+            end2 = (top[0],top[1] - mes_scale*i)
+            top2 = (end[0],end[1] - mes_scale*i)
             pg.draw.line(self.screen,PINK,top1,end1,5)
             pg.draw.line(self.screen,PINK,top2,end2,5)
+
+    def draw_line(self,point1,point2,thickness,color):
+        # To draw a a line given 2 coordinates onto the screen
+        # Calculating the slope m = (y2 - y1) / (x2 - x1)
+        slope = point2[1] - point1[1] / point2[0] - point2[1]
+        # Based on the slope finding the 2 end points in the pygame screen
+        y = F()
+
+
     # TO zoom the system by the ratio 
     def move():
         pass
@@ -136,7 +159,9 @@ def run():
                 base1 = eval(input("Enter base 1 : "))
                 base2 = (0,1)
                 Plane.draw_grid_new_base(base1,base2)
-
+            if(event.type == pg.K_w):
+                x,y = int(input("Enter 2 numbers to plot : "))
+                plt.Pl
         pg.display.update()   
 run()
 

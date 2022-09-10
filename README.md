@@ -10,9 +10,8 @@ We aim to design a 2D cartesian plane with the help of pygame library. Features 
 
 1. Creating a 2D plane :
 
-```
-![alt text] <https://github.com/DeVcB13d/Linear-Transform-Visualisation/tree/main/media/pg1.jpg>
-```
+<https://github.com/DeVcB13d/Linear-Transform-Visualisation/tree/main/media/pg1.jpg>
+
 
 * The above shown picture is a model of the 2D plane that we aim to implement
 * Critical features to be added
@@ -47,4 +46,4 @@ We aim to design a 2D cartesian plane with the help of pygame library. Features 
 
 **Ideas/Algorithms for design:**
 
-1.
+1. Designing a mathematically accurate 2D plane with various features : 
