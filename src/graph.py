@@ -1,9 +1,12 @@
 # Module having the Coordinate Plane tools
 
-
 import pygame as pg
 import sys
 from constants import *
+from line import line
+from linear_transform import linear_transform
+import numpy as np
+
 
 
 def F(x,m,c):
@@ -12,32 +15,63 @@ def F(x,m,c):
 
 
 class Coordinate_plane:
-    def __init__(self,screen,win_len = WIN_LEN,win_wid = WIN_WID,grid_size = 10):
-        # Scale - Size of 1 pixel in cm
-        self.scale=0.026458333
+    def __init__(self,screen,scale,win_len = WIN_LEN,win_wid = WIN_WID,grid_size = WIN_LEN/20):
+        '''
+        Scale = size of 1 pixel in cm
+        >>> scale = 40 for 800 X 800 means 40 pix = 1 cm
+        >>> depth_x and depth_y shows the range of values shown in the screen
+        '''
+        self.depth_x = 10
+        self.depth_y = 10
+        self.scale = win_len / (2 * self.depth_x) #40
         self.screen = screen
         self.win_len = win_len
         self.win_wid = win_wid
         self.grid_size = grid_size
-        self.draw_grid(self.grid_size)
+        self.draw_grid(self.scale)
         self.draw_axis()
         
     def coordinate(self,inx,iny):
-
         """
         To input the coodinates and return its 
         pygame UI equialent values
+        1. Convert cartesian to pixels
+        2. Shift of origin - (x,y) -> (x+win_len/2,y+win_wid/2)
         """
-        inx = inx/self.scale
-        iny = iny/self.scale
-        #return tuple([self.win_wid/2+inx,-self.win_len/2+iny])
-        return tuple([((self.win_wid/2+inx)*self.scale),((self.win_len/2+iny)*-self.scale)])
+        # Pixel to cartesian conversion : (1,3) -> (10,30) -> (210,)
+        if inx <= 0:
+            pix_inx = inx * self.scale + self.win_len/2
+        if inx > 0 :
+            pix_inx = inx * self.scale + self.win_len/2
+        if iny <=0 :
+            pix_iny = -1 * iny * self.scale + self.win_wid/2
+        if iny > 0:
+            pix_iny = -1 * iny * self.scale + self.win_wid/2
+        return (tuple([pix_inx,pix_iny]))
     def rev_coordinate(self,inx,iny):
         '''
-        To return the cartesian values from pg values
+        To return the cartesian values from pygame UI values
+        1. Shift origin back
+        2. Conver pixels to cartesian
+
+        TODO : Add approximations
         '''
-        #return tuple([self.win_len/2 - inx,self.win_wid/2 - iny])
-        return tuple([int((self.win_wid/2-inx)*-self.scale),int((self.win_len/2-iny)*self.scale)])
+        '''
+        if inx <= self.win_len/2: 
+            pix_inx = 2* inx * self.scale + self.win_len/2
+        if inx > self.win_len/2:
+            out_x = (inx - self.win_len/2)/(self.scale*2)
+            #pix_inx = inx * self.scale + self.win_len/2
+        if iny <=0 :
+            pix_iny = -2 * iny * self.scale + self.win_wid/2
+        if iny > 0:
+            pix_iny = -1 * iny * self.scale + self.win_wid/2
+        return (tuple([pix_inx,pix_iny]))
+        '''
+        out_x= (inx - self.win_len/2)/(self.scale*2)
+        out_y = (iny - self.win_wid/2)/(-2*self.scale)
+        return (tuple([out_x,out_y]))
+        
     def draw_grid(self,gridsize,line_t = 4):
         '''
         To draw the main grid with each line spaced by gridsize
@@ -69,82 +103,58 @@ class Coordinate_plane:
         pg.draw.line(self.screen, YELLOW, (posX,0), (posX,self.win_len), 2)
         posY = self.win_len/2
         pg.draw.line(self.screen, YELLOW, (0, posY), (self.win_wid, posY), 2)
-    def draw_grid_new_base(self,base1,base2):
-        '''
-        Function to draw a new grid based on base1 and base2
-
-        Basic idea 
-        >>> We need the start and end points of the line in pygame to draw a line
-        >>> To get the equation of the line, we consider 2 points
-        >>> Base point : Starts with (0,0) moves up and down by certain units
-        >>> Basis point : The coordinates of base 1 and 2
-        >>> By using a base point and basis point, we can find the end points
-        >>> To find the end points, we either know the x and y coordinate - 
-            the length and breadth
-        >>> Using the known points, we will be able to find the 2 required endpoints and draw a line
-        >>> Hoping to change the direct calculations to matrix multiplication
-        '''
-        BasePoint = (0,0)
-        BasisPoint = base1 #(1,2)
-        top_x = self.win_wid # 200
-        end_x = -top_x # -200
-        try:
-            # ( 1 - 0 / 2 - 0 ) * (200 - 0) + 0  = 100
-            top_y = (BasisPoint[1] - BasePoint[1])/(BasisPoint[0] - BasePoint[0]) * (top_x - 0 ) + BasePoint[1];
-            # ( 1 - 0 ) -100
-            end_y = (BasisPoint[1] - BasePoint[1])/(BasisPoint[0] - BasePoint[0]) * (end_x - 0 ) + BasePoint[1];
-            top = self.coordinate(top_x,top_y) #(200,100)
-            end = self.coordinate(end_x,end_y) #(-200,-100)
-            print("END : ",end,"TOP : ",top)
-        except:
-            pass
-        print((top_x,top_y),(end_x,end_y))
-        
-        mes_scale = self.scale*((self.wind_len/10)*100)
-        for i in range(0,10):
-            top1 = top;top2 = top;end1 = end;end2 = end;
-            top1 = (top[0],top[1] + mes_scale*i)
-            end1 = (end[0],end[1] + mes_scale*i)
-            end2 = (top[0],top[1] - mes_scale*i)
-            top2 = (end[0],end[1] - mes_scale*i)
-            pg.draw.line(self.screen,PINK,top1,end1,5)
-            pg.draw.line(self.screen,PINK,top2,end2,5)
-
     def draw_line(self,point1,point2,thickness,color):
         # To draw a a line given 2 coordinates onto the screen
-        # Calculating the slope m = (y2 - y1) / (x2 - x1)
-        slope = point2[1] - point1[1] / point2[0] - point2[1]
-        # Based on the slope finding the 2 end points in the pygame screen
-        y = F()
+        # Creating a line object
+        to_draw_line = line(point1[0],point2[0],point1[1],point2[1])
+        print("slope : ",to_draw_line.slope)
+        print("y intercept : ",to_draw_line.y_inter)
+        # top_x = x for y = 10         
+        top_y = self.depth_y
+        top_x = to_draw_line.get_x(top_y) 
+        top = self.coordinate(top_x,top_y)
+        end_y = -1*self.depth_y
+        end_x = to_draw_line.get_x(end_y)
+        print("top_x : ",top_x,"top_y",top_y)
+        print("end_x : ",end_x,"end_y",end_y)
+        end = self.coordinate(end_x,end_y)
+        pg.draw.line(self.screen,color,top,end,thickness)
+        #print(top,end)
+        #print("DONE")
+    def transform(self,base1,base2):
+        '''
+        Draw transformation onto the plane given 2 vectors base1 and base2
+        Steps : 
+        1. Create a linear transform object with the bases as matrix
+        2. for Each element in x_trans_lines and y_trans lines plot the line
+
+        TODO : Check for extremum points
+        '''
+        trans_matrix = np.array([base1,base2])
+        #trans_matrix = np.transpose(trans_matrix)
+
+        Linear = linear_transform(trans_matrix)
+        # Drawing multiple lines
+        print("x transform lines : \n")
+        print(Linear.x_trans_lines)
+        for Tline in Linear.x_trans_lines:
+            print("Tline : ",Tline)
+            self.draw_line(tuple([Tline[0][0],Tline[1][0]]),tuple([Tline[0][1],Tline[1][1]]),5,PINK)
 
 
-    # TO zoom the system by the ratio 
-    def move():
-        pass
         
 
-class Plotter:
-    '''
-    To plot the vectors onto the graph
-    '''
-    def __init__(self,screen,plane):
-        self.screen = screen
-        self.plane = plane
-    def plot(self,x,y):
-        start = self.plane.coordinate(0,0)
-        end = self.plane.coordinate(x,y) 
-        pg.draw.line(self.screen,(0,0,255),start,end,4)
 
         
 def run():
-    screen = pg.display.set_mode((wind_len, wind_brea))
+    screen = pg.display.set_mode((WIN_LEN,WIN_WID))
     pg.display.set_caption('Linear transformation')
     screen.fill(BLUE)
     pg_icon = pg.image.load('media\logo.jpg')
     pg.display.set_icon(pg_icon)
     run = True
-    Plane = Coordinate_plane(screen,wind_len,wind_brea,wind_len/10)
-    plt = Plotter(screen,Plane)
+    Plane = Coordinate_plane(screen,20)
+    #plt = Plotter(screen,Plane)
     #draw_line()
     while run:
         for event in pg.event.get():
@@ -156,12 +166,14 @@ def run():
                 pos = pg.mouse.get_pos()
                 print(Plane.rev_coordinate(pos[0],pos[1]))
             if (event.type == pg.KEYDOWN):
-                base1 = eval(input("Enter base 1 : "))
-                base2 = (0,1)
-                Plane.draw_grid_new_base(base1,base2)
-            if(event.type == pg.K_w):
-                x,y = int(input("Enter 2 numbers to plot : "))
-                plt.Pl
+                #base1 = eval(input("Enter base 1 : "))
+                #base2 = (0,1)
+                #Plane.draw_grid_new_base(base1,base2)
+                #p1 = eval(input("Enter point 1 : "))
+                #p2 = eval(input("Enter point 2 : "))
+                p1 = [1,0]
+                p2 = [1,1]
+                Plane.transform(p1,p2)
         pg.display.update()   
 run()
 
