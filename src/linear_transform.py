@@ -27,33 +27,35 @@ class linear_transform:
         self.M = np.array(trans_mat)
         self.x_axis_lines,self.y_axis_lines = self.generate_axis_lines()
         self.x_trans_lines,self.y_trans_lines = self.apply_transform()
-    def generate_axis_lines(self,limit = 5,basis = [[1,0],[0,1]]):
+    def generate_axis_lines(self,limit = 100,basis = [[1,0],[0,1]]):
         x_axis_lines = []
         x_base_matrix = np.array([[0,0],basis[1]])
         T = np.array(x_base_matrix.copy())
         x_axis_lines.append(T)
-        x_base_matrix[1][0] = 1
+        #x_base_matrix[1][0] = 1
         #print(x_axis_lines)
         #print("base mat : ",x_base_matrix)
         for i in range(1,limit):
             temp = x_base_matrix.copy()
+            temp[0][0] = i
             temp[0][1] = i
-            temp[1][1] = i
             #print("temp1 " , temp)
             x_axis_lines.append(temp.copy())
-            #temp[0][1] = -1*i
-            #temp[1][1] = -1*i
-            #x_axis_lines.append(temp.copy())
+            temp[0][0] = -1*i
+            temp[0][1] = -1*i
+            x_axis_lines.append(temp.copy())
             #print("x axis lines ",i,":",x_axis_lines)
         y_axis_lines = []
-        y_base_matrix = np.array([[0,0],basis[0]])
+        y_base_matrix = np.array([basis[1],[0,0]])
+        T2 = np.array(y_base_matrix.copy())
+        y_axis_lines.append(T2)
         for i in range(1,limit):
             temp = y_base_matrix.copy()
-            temp[0][0] = i
             temp[1][0] = i
+            temp[1][1] = i
             y_axis_lines.append(temp.copy())
-            temp[0][0] = -1*i
             temp[1][0] = -1*i
+            temp[1][1] = -1*i
             y_axis_lines.append(temp.copy())   
         return x_axis_lines,y_axis_lines
     def apply_transform(self):
@@ -70,13 +72,13 @@ class linear_transform:
 
 
 def main():
-    X = linear_transform([[1,0],[1,1]])
+    X = linear_transform([[0,1],[1,1]])
     print(X.x_axis_lines)
-    #print(X.y_axis_lines)
+    print(X.y_axis_lines)
     print(X.x_trans_lines)
-    #print(X.y_trans_lines)
+    print(X.y_trans_lines)
 
-main()
+#main()
 
 
 
