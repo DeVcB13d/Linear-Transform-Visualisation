@@ -37,7 +37,7 @@ class matrix:
                 print(k)
 
 def run():
-        print("Matrix format: a b c;d e f;g h i")
+        print("Matrix format: ")
         mat = [[1,4],[8,9]]
         #print(mat)
         M=matrix(mat)
