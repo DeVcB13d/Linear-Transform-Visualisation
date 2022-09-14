@@ -50,6 +50,9 @@ myButton1.pack()
 myButton2.pack()
 myButton1.place(x=180, y=370)
 myButton2.place(x=590, y=500)
+#Add frame
+frame3=tk.Frame(window,height=250,width=500, bg="#ADD8E6",bd=1)
+frame3.place(x=550,y=200)
 """label1 = tk.Label(frame2,
                   text="Vector info",
                   font=('Times new Roman', 10, 'bold'),
