@@ -4,12 +4,12 @@ Contains all the contants used
 
 #COLOURS
 
-
+BLACK = (0,0,0)
 BLUE = (0, 0, 51)
 YELLOW = (255, 255, 0)
 LAV = (229, 204, 255)
 PINK = (255,204,204)
 #INTERFACE CONSTANTS
 WIN_LEN = 800
-WIN_WID = 800
+WIN_WID = 600
 GRID_LINE_WIDTH = 5
