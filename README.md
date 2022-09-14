@@ -49,3 +49,7 @@ We aim to design a 2D cartesian plane with the help of pygame library. Features 
 1. Designing a mathematically accurate 2D plane with various features : 
 
 * 
+
+
+
+**Ideas to add Linear algebra functionalities**

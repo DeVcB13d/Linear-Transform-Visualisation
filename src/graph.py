@@ -8,7 +8,7 @@ from linear_transform import linear_transform
 import numpy as np
 
 class Coordinate_plane:
-    def __init__(self,screen,scale,win_len = WIN_LEN,win_wid = WIN_WID,grid_size = WIN_LEN/20,depth_x = 10,depth_y = 10):
+    def __init__(self,screen,scale = MATH_SCALE,win_len = WIN_LEN,win_wid = WIN_WID,grid_size = WIN_LEN/20,depth_x = 10,depth_y = 10):
         '''
         Scale = size of 1 pixel in cm
         >>> scale = 40 for 800 X 800 means 40 pix = 1 cm
@@ -68,7 +68,7 @@ class Coordinate_plane:
             pg.draw.line(self.screen, LAV, hor_ini_pos, hor_fin_pos,line_t)
             hor_ini_pos[1] += self.scale
             hor_fin_pos[1] += self.scale
-    def draw_axis(self,axis_color = YELLOW,axis_thickness = 2):
+    def draw_axis(self,axis_color = YELLOW,axis_thickness = 3):
         """
         To draw the coordinate axes
         """
@@ -80,16 +80,16 @@ class Coordinate_plane:
         # To draw a a line given 2 coordinates onto the screen
         # Creating a line object
         to_draw_line = line(point1[0],point2[0],point1[1],point2[1])
-        print("slope : ",to_draw_line.slope)
-        print("y intercept : ",to_draw_line.y_inter)
+        #print("slope : ",to_draw_line.slope)
+        #print("y intercept : ",to_draw_line.y_inter)
         # top_x = x for y = 10         
         top_y = self.depth_y
         top_x = to_draw_line.get_x(top_y) 
         top = self.coordinate(top_x,top_y)
         end_y = -1*self.depth_y
         end_x = to_draw_line.get_x(end_y)
-        print("top_x : ",top_x,"top_y",top_y)
-        print("end_x : ",end_x,"end_y",end_y)
+        #print("top_x : ",top_x,"top_y",top_y)
+        #print("end_x : ",end_x,"end_y",end_y)
         end = self.coordinate(end_x,end_y)
         pg.draw.line(self.screen,color,top,end,thickness)
         #print(top,end)
@@ -105,18 +105,22 @@ class Coordinate_plane:
         '''
         trans_matrix = (np.array([base1,base2]))
         #trans_matrix = np.transpose(trans_matrix)
-
         Linear = linear_transform(trans_matrix)
         # Drawing multiple lines
-        print("x transform lines : \n")
-        print(Linear.x_trans_lines)
+        #print("x transform lines : \n")
+        #print(Linear.x_trans_lines)
         for Tline in Linear.x_trans_lines:
-            print("Tline : ",Tline)
-            self.draw_line(tuple([Tline[0][0],Tline[1][0]]),tuple([Tline[0][1],Tline[1][1]]),5,PINK)
-        print(Linear.y_trans_lines)
+            #print("Tline : ",Tline)
+            self.draw_line(tuple([Tline[0][0],Tline[1][0]]),tuple([Tline[0][1],Tline[1][1]]),2,PINK)
+        #print(Linear.y_trans_lines)
         for Tline in Linear.y_trans_lines:
-            print("Tline : ",Tline)
-            self.draw_line(tuple([Tline[0][0],Tline[1][0]]),tuple([Tline[0][1],Tline[1][1]]),5,PINK)
+            #print("Tline : ",Tline)
+            self.draw_line(tuple([Tline[0][0],Tline[1][0]]),tuple([Tline[0][1],Tline[1][1]]),2,PINK)
+    def clear_screen(self):
+        self.screen.fill(BLUE)
+        self.draw_axis()
+        self.draw_grid()
+
 
 def run():
     screen = pg.display.set_mode((WIN_LEN,WIN_WID))
@@ -125,7 +129,7 @@ def run():
     pg_icon = pg.image.load('media\logo.jpg')
     pg.display.set_icon(pg_icon)
     run = True
-    Plane = Coordinate_plane(screen,40)
+    Plane = Coordinate_plane(screen)
     #plt = Plotter(screen,Plane)
     #draw_line()
     while run:
@@ -136,6 +140,7 @@ def run():
             if (event.type == pg.MOUSEBUTTONUP):
                 # To print the selected coordinate
                 pos = pg.mouse.get_pos()
+                Plane.clear_screen()
                 print(Plane.rev_coordinate(pos[0],pos[1]))
             if (event.type == pg.KEYDOWN):
                 #base1 = eval(input("Enter base 1 : "))
@@ -143,8 +148,8 @@ def run():
                 #Plane.draw_grid_new_base(base1,base2)
                 #p1 = eval(input("Enter point 1 : "))
                 #p2 = eval(input("Enter point 2 : "))
-                p1 = [1,3]
-                p2 = [2,1]
+                p1 = [2,0]
+                p2 = [4,1]
                 Plane.transform(p1,p2)
                 #Plane.draw_line((3,4),(2,1),5,PINK)
         pg.display.update()   
