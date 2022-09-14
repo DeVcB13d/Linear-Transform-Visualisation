@@ -27,7 +27,7 @@ class Coordinate_plane:
     def config_plane(self,plane_color = BLACK):
         self.screen.fill((plane_color))
 
-    def coordinate(self,inx,iny):
+    def coordinate(self,inx,iny)->tuple:
         """
         To input the coordinates and return its pygame UI equialent values
         1. Convert cartesian to pixels
@@ -37,7 +37,7 @@ class Coordinate_plane:
         pix_inx = inx * self.scale + self.win_len/2
         pix_iny = -1 * iny * self.scale + self.win_wid/2
         return (tuple([pix_inx,pix_iny]))
-    def rev_coordinate(self,inx,iny):
+    def rev_coordinate(self,inx,iny)->tuple:
         '''
         To return the cartesian values from pygame UI values
         1. Shift origin back
@@ -45,11 +45,11 @@ class Coordinate_plane:
 
         TODO : Add approximations
         '''
-        out_x= (inx - self.win_len/2)/(self.scale*2)
-        out_y = (iny - self.win_wid/2)/(-2*self.scale)
+        out_x= (inx - self.win_len/2)/(self.scale)
+        out_y = (iny - self.win_wid/2)/(-1*self.scale)
         return (tuple([out_x,out_y]))
         
-    def draw_grid(self,line_t = 2):
+    def draw_grid(self,line_t = 1):
         '''
         To draw the main grid with each line spaced by gridsize
 
@@ -76,7 +76,7 @@ class Coordinate_plane:
         pg.draw.line(self.screen,axis_color,(posX,0),(posX,self.win_wid),axis_thickness)
         posY = self.win_wid/2
         pg.draw.line(self.screen,axis_color,(0, posY),(self.win_len, posY),axis_thickness)
-    def draw_line(self,point1,point2,thickness,color):
+    def draw_line(self,point1,point2,thickness,color ):
         # To draw a a line given 2 coordinates onto the screen
         # Creating a line object
         to_draw_line = line(point1[0],point2[0],point1[1],point2[1])
@@ -109,6 +109,8 @@ class Coordinate_plane:
         # Drawing multiple lines
         #print("x transform lines : \n")
         #print(Linear.x_trans_lines)
+        self.draw_vector((0,0),tuple([base1[0],base2[0]]),RED,6)
+        self.draw_vector((0,0),tuple([base1[1],base2[1]]),GREEN,6)
         for Tline in Linear.x_trans_lines:
             #print("Tline : ",Tline)
             self.draw_line(tuple([Tline[0][0],Tline[1][0]]),tuple([Tline[0][1],Tline[1][1]]),2,PINK)
@@ -116,16 +118,44 @@ class Coordinate_plane:
         for Tline in Linear.y_trans_lines:
             #print("Tline : ",Tline)
             self.draw_line(tuple([Tline[0][0],Tline[1][0]]),tuple([Tline[0][1],Tline[1][1]]),2,PINK)
+        self.draw_vector((0,0),tuple([base1[0],base2[0]]),RED,6)
+        self.draw_vector((0,0),tuple([base1[1],base2[1]]),GREEN,6)
     def clear_screen(self):
         self.screen.fill(BLUE)
         self.draw_axis()
         self.draw_grid()
+    def draw_vector(self,ini_pos,fin_pos,color = PINK,thickness = 4):
+        ini_pos_pg = self.coordinate(ini_pos[0],ini_pos[1])
+        fin_pos_pg = self.coordinate(fin_pos[0],fin_pos[1])
+        pg.draw.line(self.screen,color,ini_pos_pg,fin_pos_pg,thickness)
+    def insert_axis_text(self):
+        font = pg.font.Font('freesansbold.ttf', 15)
+        for i in range(-self.depth_x,self.depth_x):
+            txt = str(i)
+            text1 = font.render(txt, True,YELLOW)
+            position_x = list(self.coordinate(0,i))
+            position_x[0]+=20
+            position_x=tuple(position_x)
+            textRect = text1.get_rect()
+            textRect.center = ((position_x))
+            self.screen.blit(text1,textRect)
+        for j in range(-self.depth_y,self.depth_y):
+            txt = str(j)
+            text = font.render(txt,True,YELLOW)
+            position_y = list(self.coordinate(j,0))
+            position_y[1]+=20
+            position_y = tuple(position_y)
+            textRect = text.get_rect()
+            textRect.center = ((position_y))
+            self.screen.blit(text,textRect)
+
 
 
 def run():
+    pg.init()
     screen = pg.display.set_mode((WIN_LEN,WIN_WID))
     pg.display.set_caption('Linear transformation')
-    screen.fill(BLUE)
+    screen.fill(BLACK)
     pg_icon = pg.image.load('media\logo.jpg')
     pg.display.set_icon(pg_icon)
     run = True
@@ -148,9 +178,10 @@ def run():
                 #Plane.draw_grid_new_base(base1,base2)
                 #p1 = eval(input("Enter point 1 : "))
                 #p2 = eval(input("Enter point 2 : "))
-                p1 = [2,0]
-                p2 = [4,1]
+                p1 = [5,1]
+                p2 = [3,-5]
                 Plane.transform(p1,p2)
+                Plane.insert_axis_text()
                 #Plane.draw_line((3,4),(2,1),5,PINK)
         pg.display.update()   
 run()

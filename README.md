@@ -23,7 +23,7 @@ We aim to design a 2D cartesian plane with the help of pygame library. Features 
   * Add the linear transform change to the plane (blue lines)
 * Creating an interactive interface using tkinter :
   1.Making two frames :To enter two vectors for transformation
-   2.Creating two buttons:Run simulation and calculating transformed vector.
+  2.Creating two buttons:Run simulation and calculating transformed vector.
   
 
 2. Adding linear algebra features to the tool

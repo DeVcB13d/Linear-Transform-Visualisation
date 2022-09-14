@@ -1,6 +1,6 @@
 #import numpy as np
 import random
-
+import numpy as np
 
 class matrix:
     def __init__(self,mat):
@@ -27,7 +27,6 @@ class matrix:
             print('\n')
     def eigen(self,M):
         #k=0
-
         for k in range(0,100):
             #k=random.randint(1,100)
             I=[[k,0],[0,k]]
@@ -46,7 +45,7 @@ def run():
         M1=matrix(mat)
         mat2=M1.transposeMatrix(mat)
         print(mat2)
-        M1.eigen(mat)
+        #M1.eigen(mat)
 run()
 
 
