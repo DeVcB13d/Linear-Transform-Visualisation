@@ -1,4 +1,5 @@
-#import numpy as np
+import numpy as np
+from numpy.linalg import eig
 import random
 
 
@@ -26,16 +27,23 @@ class matrix:
 
             print('\n')
     def eigen(self,M):
-        #k=0
+        mat1=np.M
+        print(mat1)
+        Val,Vec=eig(mat1)
+        print("Eigen values of the given matrix:")
+        print(Val)
+        print("Eigen vectors of the given matrix:")
+        print(Val)
 
-        for k in range(0,100):
+
+        """for k in range(0,100):
             #k=random.randint(1,100)
             I=[[k,0],[0,k]]
             A=[self.M-I]
             b=self.detMatrix(A)
             if b==0:
                 print("Eigen values:")
-                print(k)
+                print(k)"""
 
 def run():
         print("Matrix format: ")
