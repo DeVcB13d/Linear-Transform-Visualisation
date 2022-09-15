@@ -1,10 +1,10 @@
 # from tkinter import *
 import tkinter as tk
 from tkinter import CENTER, LEFT, RIGHT
-from pygameUI import *
+from graph import *
 
 window = tk.Tk(className=' Linear transform-Visualization')
-window.geometry("800x800")
+window.geometry("900x600")
 window.configure(bg="#E6E6FA")
 # setting background image
 bg = tk.PhotoImage(file="media\pg2.png")
@@ -40,10 +40,10 @@ def Input_vector():
     v2.grid(row=3,column=1,padx=30,pady=20)
     e2 = tk.Entry(frame1, width=30, justify=LEFT)
     e2.grid(row=3,column=2)
+    print(e1,e2)
 
 myButton1 = tk.Button(window, text="Calculate", command=Input_vector(),font=('calibre', 10, 'bold'),
-                      justify=LEFT,padx=10,pady=10
-                      ,bg='#C1E1C1')
+                      justify=LEFT,padx=10,pady=10,bg='#C1E1C1')
 myButton2 = tk.Button(window, text="Run simulation",justify=RIGHT,command = run,bg='#C1E1C1',font=('calibre', 10, 'bold')
                       ,padx=5,pady=10,)
 myButton1.pack()

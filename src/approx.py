@@ -4,7 +4,8 @@ def approx(c):
       cx=ax/10
       rx=round(cx)
       ix=rx/100
-      print(ix)
+      return round(ix,2)
+      #print(ix)
     if c<0:
       ay=int(c*-1000)
       cy1=int(ay/100)
@@ -18,8 +19,11 @@ def approx(c):
       hy=ay-sy1+10
       iy=hy/1000
       iy=-iy
-      print(iy)
-x1=float(input("Enter x coordinate:"))
-y1=float(input("Enter y coordinate:"))
-approx(x1)
-approx(y1)
+      return round(iy,2)
+      #print(iy)
+
+def main():
+  x1=float(input("Enter x coordinate:"))
+  y1=float(input("Enter y coordinate:"))
+  approx(x1)
+  approx(y1)

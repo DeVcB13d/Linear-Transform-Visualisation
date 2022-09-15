@@ -6,6 +6,7 @@ from constants import *
 from line import line
 from linear_transform import linear_transform
 import numpy as np
+from approx import approx
 
 class Coordinate_plane:
     def __init__(self,screen,scale = MATH_SCALE,win_len = WIN_LEN,win_wid = WIN_WID,grid_size = WIN_LEN/20,depth_x = 10,depth_y = 10):
@@ -24,6 +25,7 @@ class Coordinate_plane:
         self.grid_size = grid_size
         self.draw_grid()
         self.draw_axis()
+        self.insert_axis_text()
     def config_plane(self,plane_color = BLACK):
         self.screen.fill((plane_color))
 
@@ -124,6 +126,7 @@ class Coordinate_plane:
         self.screen.fill(BLUE)
         self.draw_axis()
         self.draw_grid()
+        self.insert_axis_text()
     def draw_vector(self,ini_pos,fin_pos,color = PINK,thickness = 4):
         ini_pos_pg = self.coordinate(ini_pos[0],ini_pos[1])
         fin_pos_pg = self.coordinate(fin_pos[0],fin_pos[1])
@@ -148,6 +151,13 @@ class Coordinate_plane:
             textRect = text.get_rect()
             textRect.center = ((position_y))
             self.screen.blit(text,textRect)
+    def eigen_vectors(self,trans_matrix : np.array):
+        # To highlight the eigenvectors in a given transformation
+        pass
+        
+
+
+
 
 
 
@@ -160,9 +170,27 @@ def run():
     pg.display.set_icon(pg_icon)
     run = True
     Plane = Coordinate_plane(screen)
-    #plt = Plotter(screen,Plane)
-    #draw_line()
+    print("Welcome to the Linear Transforms visualization interface : ")
+    print("Here are the currently available functionalities")
+    print("A. Linear Transforms")
     while run:
+        keys = pg.key.get_pressed()
+        if (keys[pg.K_a]):
+            Plane.clear_screen()
+            p1 = eval(input("Enter Transform Matrix : "))
+            Plane.transform(p1[0],p1[1])
+        elif (keys[pg.K_b]):
+            Plane.clear_screen()
+            p1 = eval(input("Enter Matrix 1 : "))
+            Plane.transform(p1[0],p1[1])
+            pg.display.update()
+            print("Generated transform of matrix 1")
+            p2 = eval(input("Enter Matrix 2 : "))
+            p1_n = np.array(p1)
+            p2_n = np.array(p2)
+            p3 = np.matmul(p1_n,p2_n)
+            Plane.clear_screen()
+            Plane.transform(p3[0],p3[1])
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 sys.exit()
@@ -171,22 +199,11 @@ def run():
                 # To print the selected coordinate
                 pos = pg.mouse.get_pos()
                 Plane.clear_screen()
-                print(Plane.rev_coordinate(pos[0],pos[1]))
-            if (event.type == pg.KEYDOWN):
-                #base1 = eval(input("Enter base 1 : "))
-                #base2 = (0,1)
-                #Plane.draw_grid_new_base(base1,base2)
-                #p1 = eval(input("Enter point 1 : "))
-                #p2 = eval(input("Enter point 2 : "))
-                p1 = [5,1]
-                p2 = [3,-5]
-                Plane.transform(p1,p2)
-                Plane.insert_axis_text()
-                #Plane.draw_line((3,4),(2,1),5,PINK)
+                a,b = Plane.rev_coordinate(pos[0],pos[1])
+                print(approx(a),approx(b))
         pg.display.update()   
+
+
 run()
-
-
-
 
 

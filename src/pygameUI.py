@@ -44,6 +44,12 @@ def run():
     #plt = Plotter(screen,Plane)
     #draw_line()
     while run:
+        keys = pg.key.get_pressed()
+        if (keys[pg.K_a]):
+            Plane.clear_screen()
+            p1 = eval(input("Enter Transform Matrix : "))
+            Plane.transform(p1[0],p1[1])
+
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 sys.exit()
@@ -52,16 +58,17 @@ def run():
                 # To print the selected coordinate
                 pos = pg.mouse.get_pos()
                 Plane.clear_screen()
-                print(Plane.rev_coordinate(pos[0],pos[1]))
-            if (event.type == pg.KEYDOWN):
+                a,b = Plane.rev_coordinate(pos[0],pos[1])
+                print(approx(a),approx(b))
+            #if (event.type == pg.K_SPACE):
                 #base1 = eval(input("Enter base 1 : "))
                 #base2 = (0,1)
                 #Plane.draw_grid_new_base(base1,base2)
-                #p1 = eval(input("Enter point 1 : "))
+                #p1 = eval(input("Enter Transform Matrix : "))
                 #p2 = eval(input("Enter point 2 : "))
-                p1 = [2,3]
-                p2 = [4,1]
-                Plane.transform(p1,p2)
+                #Plane.transform(p1[0],p1[1])
+                
                 #Plane.draw_line((3,4),(2,1),5,PINK)
         pg.display.update()   
-#run()
+
+run()
