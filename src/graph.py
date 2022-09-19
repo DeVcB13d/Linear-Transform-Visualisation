@@ -26,10 +26,11 @@ class Coordinate_plane:
         self.draw_grid()
         self.draw_axis()
         self.insert_axis_text()
+        self.state = [[1,0],[0,1]]
     def config_plane(self,plane_color = BLACK):
         self.screen.fill((plane_color))
 
-    def coordinate(self,inx,iny)->tuple:
+    def coordinate(self,inx:float,iny:float)->tuple:
         """
         To input the coordinates and return its pygame UI equialent values
         1. Convert cartesian to pixels
@@ -39,7 +40,7 @@ class Coordinate_plane:
         pix_inx = inx * self.scale + self.win_len/2
         pix_iny = -1 * iny * self.scale + self.win_wid/2
         return (tuple([pix_inx,pix_iny]))
-    def rev_coordinate(self,inx,iny)->tuple:
+    def rev_coordinate(self,inx:float,iny:float)->tuple:
         '''
         To return the cartesian values from pygame UI values
         1. Shift origin back
@@ -96,7 +97,7 @@ class Coordinate_plane:
         pg.draw.line(self.screen,color,top,end,thickness)
         #print(top,end)
         #print("DONE")
-    def transform(self,base1,base2):
+    def transform(self,base1,base2,color = PINK):
         '''
         Draw transformation onto the plane given 2 vectors base1 and base2
         Steps : 
@@ -115,18 +116,20 @@ class Coordinate_plane:
         self.draw_vector((0,0),tuple([base1[1],base2[1]]),GREEN,6)
         for Tline in Linear.x_trans_lines:
             #print("Tline : ",Tline)
-            self.draw_line(tuple([Tline[0][0],Tline[1][0]]),tuple([Tline[0][1],Tline[1][1]]),2,PINK)
+            self.draw_line(tuple([Tline[0][0],Tline[1][0]]),tuple([Tline[0][1],Tline[1][1]]),2,color)
         #print(Linear.y_trans_lines)
         for Tline in Linear.y_trans_lines:
             #print("Tline : ",Tline)
-            self.draw_line(tuple([Tline[0][0],Tline[1][0]]),tuple([Tline[0][1],Tline[1][1]]),2,PINK)
+            self.draw_line(tuple([Tline[0][0],Tline[1][0]]),tuple([Tline[0][1],Tline[1][1]]),2,color)
         self.draw_vector((0,0),tuple([base1[0],base2[0]]),RED,6)
         self.draw_vector((0,0),tuple([base1[1],base2[1]]),GREEN,6)
+        self.state = trans_matrix
     def clear_screen(self):
-        self.screen.fill(BLUE)
+        self.screen.fill(BLACK)
         self.draw_axis()
         self.draw_grid()
         self.insert_axis_text()
+        self.state = [[1,0],[0,1]]
     def draw_vector(self,ini_pos,fin_pos,color = PINK,thickness = 4):
         ini_pos_pg = self.coordinate(ini_pos[0],ini_pos[1])
         fin_pos_pg = self.coordinate(fin_pos[0],fin_pos[1])
@@ -151,11 +154,52 @@ class Coordinate_plane:
             textRect = text.get_rect()
             textRect.center = ((position_y))
             self.screen.blit(text,textRect)
+    def change_scale(self,new_scale):
+        self.scale  = new_scale
+        self.depth_x = self.win_len//self.scale
+        self.depth_y = self.win_wid//self.scale
+        self.clear_screen()
+        self.draw_grid()
+        self.draw_axis()
+        self.insert_axis_text()
+        # To retain the transform 
+        print(self.state)
+        if (self.state != BASIS):
+            print("HII")
+            self.transform(self.state[0],self.state[1])
+
     def eigen_vectors(self,trans_matrix : np.array):
         # To highlight the eigenvectors in a given transformation
-        pass
-        
-
+        values,vectors = np.linalg.eig(trans_matrix)
+        print("values : ",values)
+        print("vectors : ",vectors)
+        self.draw_line((0,0),tuple(vectors[0]),4,LIME)
+        self.disp_vector(vectors[0])
+        self.draw_line((0,0),tuple(vectors[1]),4,LIME)
+        self.disp_vector(vectors[1])
+        #self.transform(tuple(vectors[0]),tuple(vectors[1]),RED)
+    def solve(self,A : np.array,b : np.array):
+        # To solve a linear equ
+        Ainv = np.linalg.inv(A)
+        res = np.matmul(b,Ainv)
+        self.disp_vector(b,LAV,15)
+        self.draw_vector((0,0),tuple(b),ORANGE,5)
+        pg.time.wait(1000)
+        pg.display.flip()
+        self.transform(A[0],A[1],LIME)
+        pg.time.wait(1000)
+        pg.display.flip()
+        self.draw_vector((0,0),tuple(res),ORANGE,5)
+        self.disp_vector(res,LAV,15)
+    def disp_vector(self,vector,color = LIGHT_BLUE,size = 10):
+        font = pg.font.Font('freesansbold.ttf', size)
+        txt = str(vector)
+        text1 = font.render(txt,True,color)
+        position_x = list(self.coordinate(vector[0],vector[1]))
+        position_x=tuple(position_x)
+        textRect = text1.get_rect()
+        textRect.center = ((position_x))
+        self.screen.blit(text1,textRect)
 
 
 
@@ -173,6 +217,11 @@ def run():
     print("Welcome to the Linear Transforms visualization interface : ")
     print("Here are the currently available functionalities")
     print("A. Linear Transforms")
+    print("B. Matrix Multiplication")
+    print("C. Change_scale")
+    print("D. Draw eigenvectors")
+    print("E. Clear the screen")
+    print("F. Linear Equation")
     while run:
         keys = pg.key.get_pressed()
         if (keys[pg.K_a]):
@@ -183,7 +232,7 @@ def run():
             Plane.clear_screen()
             p1 = eval(input("Enter Matrix 1 : "))
             Plane.transform(p1[0],p1[1])
-            pg.display.update()
+            pg.display.flip()
             print("Generated transform of matrix 1")
             p2 = eval(input("Enter Matrix 2 : "))
             p1_n = np.array(p1)
@@ -191,6 +240,17 @@ def run():
             p3 = np.matmul(p1_n,p2_n)
             Plane.clear_screen()
             Plane.transform(p3[0],p3[1])
+        elif(keys[pg.K_c]):
+            c = int(input("Enter the new scale : "))
+            Plane.change_scale(c)
+        elif(keys[pg.K_d]):
+            Plane.eigen_vectors(p1)
+        elif(keys[pg.K_e]):
+            Plane.clear_screen()
+        elif(keys[pg.K_f]):
+            A1 = np.array(eval(input("Enter Coefficient Matrix : ")))
+            b1 = np.array(eval(input("Enter the constant matrix : ")))
+            Plane.solve(A1,b1)
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 sys.exit()
@@ -198,7 +258,7 @@ def run():
             if (event.type == pg.MOUSEBUTTONUP):
                 # To print the selected coordinate
                 pos = pg.mouse.get_pos()
-                Plane.clear_screen()
+                #Plane.clear_screen()
                 a,b = Plane.rev_coordinate(pos[0],pos[1])
                 print(approx(a),approx(b))
         pg.display.update()   
