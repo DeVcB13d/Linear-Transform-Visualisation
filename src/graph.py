@@ -7,7 +7,8 @@ from line import line
 from linear_transform import linear_transform
 import numpy as np
 from approx import approx
-
+pg.init()
+screen = pg.display.set_mode((WIN_LEN,WIN_WID))
 class Coordinate_plane:
     def __init__(self,screen,scale = MATH_SCALE,win_len = WIN_LEN,win_wid = WIN_WID,grid_size = WIN_LEN/20,depth_x = 10,depth_y = 10):
         '''
@@ -112,8 +113,8 @@ class Coordinate_plane:
         # Drawing multiple lines
         #print("x transform lines : \n")
         #print(Linear.x_trans_lines)
-        self.draw_vector((0,0),tuple([base1[0],base2[0]]),RED,6)
-        self.draw_vector((0,0),tuple([base1[1],base2[1]]),GREEN,6)
+        self.draw_vector((0,0),tuple([base1[0],base2[0]]),RED,5)
+        self.draw_vector((0,0),tuple([base1[1],base2[1]]),GREEN,5)
         for Tline in Linear.x_trans_lines:
             #print("Tline : ",Tline)
             self.draw_line(tuple([Tline[0][0],Tline[1][0]]),tuple([Tline[0][1],Tline[1][1]]),2,color)
@@ -121,8 +122,8 @@ class Coordinate_plane:
         for Tline in Linear.y_trans_lines:
             #print("Tline : ",Tline)
             self.draw_line(tuple([Tline[0][0],Tline[1][0]]),tuple([Tline[0][1],Tline[1][1]]),2,color)
-        self.draw_vector((0,0),tuple([base1[0],base2[0]]),RED,6)
-        self.draw_vector((0,0),tuple([base1[1],base2[1]]),GREEN,6)
+        self.draw_vector((0,0),tuple([base1[0],base2[0]]),RED,3)
+        self.draw_vector((0,0),tuple([base1[1],base2[1]]),GREEN,3)
         self.state = trans_matrix
     def clear_screen(self):
         self.screen.fill(BLACK)
@@ -167,47 +168,96 @@ class Coordinate_plane:
         if (self.state != BASIS):
             print("HII")
             self.transform(self.state[0],self.state[1])
-
+    def put_onto_screen(self,txt,position,size = 20,color = RED,bgcolor = LIGHT_BLUE):
+        font = pg.font.Font('freesansbold.ttf', size)
+        text1 = font.render(txt,True,color,bgcolor)
+        position_x = list(self.coordinate(position[0],position[1]))
+        position_x=tuple(position_x)
+        textRect = text1.get_rect()
+        textRect.center = ((position_x))
+        self.screen.blit(text1,textRect)
     def eigen_vectors(self,trans_matrix : np.array):
         # To highlight the eigenvectors in a given transformation
+        self.clear_screen()
+        pg.display.update()
+        pg.time.wait(100)
         values,vectors = np.linalg.eig(trans_matrix)
-        print("values : ",values)
-        print("vectors : ",vectors)
         self.draw_line((0,0),tuple(vectors[0]),4,LIME)
         self.disp_vector(vectors[0])
         self.draw_line((0,0),tuple(vectors[1]),4,LIME)
         self.disp_vector(vectors[1])
+        print("Transformed Plane : ")
+        x = input("")
+        self.transform(trans_matrix[0],trans_matrix[1])
         #self.transform(tuple(vectors[0]),tuple(vectors[1]),RED)
+    def eigen_vectors_2(self,trans_matrix : np.array):
+        values,vectors = np.linalg.eig(trans_matrix)
+        self.draw_vector((0,0),tuple(vectors[0]),ORANGE)
+        self.put_onto_screen("Original_1",tuple(vectors[0]))
+        self.draw_vector((0,0),tuple(vectors[1]),ORANGE)
+        self.put_onto_screen("Original_2",tuple(vectors[1]))
+        pg.display.update()
+        pg.display.flip()
+        pg.time.wait(4000)
+        self.clear_screen()
+        self.draw_vector((0,0),tuple(vectors[0]),ORANGE)
+        self.draw_vector((0,0),tuple(vectors[1]),ORANGE)
+        self.transform(trans_matrix[0],trans_matrix[1])
+        pg.display.update()
+        pg.display.flip()
+        pg.time.wait(4000)
+    
+        self.draw_line((0,0),tuple(vectors[0]),4,LIME)
+        self.disp_vector(vectors[0])
+        self.draw_line((0,0),tuple(vectors[1]),4,LIME)
+        self.disp_vector(vectors[1])
+
+
     def solve(self,A : np.array,b : np.array):
         # To solve a linear equ
+        self.clear_screen();
         Ainv = np.linalg.inv(A)
         res = np.matmul(b,Ainv)
         self.disp_vector(b,LAV,15)
         self.draw_vector((0,0),tuple(b),ORANGE,5)
-        pg.time.wait(1000)
+        pg.time.wait(4000)
         pg.display.flip()
         self.transform(A[0],A[1],LIME)
-        pg.time.wait(1000)
+        pg.time.wait(4000)
         pg.display.flip()
         self.draw_vector((0,0),tuple(res),ORANGE,5)
         self.disp_vector(res,LAV,15)
     def disp_vector(self,vector,color = LIGHT_BLUE,size = 10):
         font = pg.font.Font('freesansbold.ttf', size)
-        txt = str(vector)
+        txt = str(tuple([round(vector[0],2),round(vector[1],2)]))
         text1 = font.render(txt,True,color)
         position_x = list(self.coordinate(vector[0],vector[1]))
         position_x=tuple(position_x)
         textRect = text1.get_rect()
         textRect.center = ((position_x))
         self.screen.blit(text1,textRect)
+    def multiply(self,p1,p2):
+        self.transform(p1[0],p1[1])
+        pg.display.update()
+        pg.display.flip()
+        print("Generated transform of matrix 1")
+        self.put_onto_screen(" ",(0,0))
+        pg.display.update()
+        pg.display.flip()
+        pg.time.wait(3000)
+        p1_n = np.array(p1)
+        p2_n = np.array(p2)
+        p3 = np.matmul(p1_n,p2_n)
+        self.clear_screen()
+        print("Generated transform of matrix 2")
+        self.transform(p3[0],p3[1])
+
 
 
 
 
 
 def run():
-    pg.init()
-    screen = pg.display.set_mode((WIN_LEN,WIN_WID))
     pg.display.set_caption('Linear transformation')
     screen.fill(BLACK)
     pg_icon = pg.image.load('media\logo.jpg')
@@ -223,6 +273,7 @@ def run():
     print("E. Clear the screen")
     print("F. Linear Equation")
     while run:
+        pg.time.wait(60)
         keys = pg.key.get_pressed()
         if (keys[pg.K_a]):
             Plane.clear_screen()
@@ -231,23 +282,18 @@ def run():
         elif (keys[pg.K_b]):
             Plane.clear_screen()
             p1 = eval(input("Enter Matrix 1 : "))
-            Plane.transform(p1[0],p1[1])
-            pg.display.flip()
-            print("Generated transform of matrix 1")
             p2 = eval(input("Enter Matrix 2 : "))
-            p1_n = np.array(p1)
-            p2_n = np.array(p2)
-            p3 = np.matmul(p1_n,p2_n)
-            Plane.clear_screen()
-            Plane.transform(p3[0],p3[1])
+            Plane.multiply(p1,p2)
         elif(keys[pg.K_c]):
             c = int(input("Enter the new scale : "))
             Plane.change_scale(c)
         elif(keys[pg.K_d]):
-            Plane.eigen_vectors(p1)
+            p1 = eval(input("Enter Transform Matrix : "))
+            Plane.eigen_vectors_2(p1)
         elif(keys[pg.K_e]):
             Plane.clear_screen()
         elif(keys[pg.K_f]):
+            Plane.clear_screen
             A1 = np.array(eval(input("Enter Coefficient Matrix : ")))
             b1 = np.array(eval(input("Enter the constant matrix : ")))
             Plane.solve(A1,b1)
@@ -261,9 +307,11 @@ def run():
                 #Plane.clear_screen()
                 a,b = Plane.rev_coordinate(pos[0],pos[1])
                 print(approx(a),approx(b))
+            pg.display.update()
         pg.display.update()   
 
 
-run()
+while True:
+    run()
 
 
